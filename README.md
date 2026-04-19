@@ -84,8 +84,31 @@ Programs like Iowa and Wisconsin consistently overperform their recruiting ranki
 
 ---
 
+## How to Run
+
+1. Clone the repo and navigate into the project directory
+2. Create a virtual environment and install dependencies:
+   ```
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+3. Add your CFBD API key to a `.env` file:
+   ```
+   CFBD_API_KEY=your_key
+   ```
+4. Run scripts in order:
+   ```
+   python data_pull.py       # pulls recruiting class rankings → recruiting_classes.csv
+   python wins_and_merge.py  # pulls win/loss records and merges → merged_data.csv
+   python model.py           # season-level win % model
+   python game_model.py      # game-level talent differential model
+   ```
+
+---
+
 ## Tools & Assistance
 
 Built with Python using the `cfbd`, `pandas`, `scikit-learn`, and `matplotlib` libraries. Data sourced from the [College Football Data API](https://collegefootballdata.com).
 
-This project was built with assistance from Claude (Anthropic) via Claude Code. AI was used to help structure the data pipeline, debug API calls, design the modeling approach, and interpret results. All findings and analytical decisions were reviewed and directed by the author.
+This project was built with assistance from Claude (Anthropic) via Claude Code for debugging, API integration, and code structure. Project direction, analytical framing, and interpretation of findings were the author's own.

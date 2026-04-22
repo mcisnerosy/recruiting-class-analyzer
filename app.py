@@ -32,6 +32,12 @@ st.markdown("""
         [data-testid="stHeader"] { background-color: #111111 !important; }
         #MainMenu { visibility: hidden; }
         footer { visibility: hidden; }
+        .color-bar-wrap { background: #2a2a2a; border-radius: 6px; height: 18px; width: 100%; margin-top: 6px; }
+        .color-bar-fill { height: 18px; border-radius: 6px; transition: width 0.4s ease; }
+        @media (max-width: 640px) {
+            h1 { font-size: 2rem !important; }
+            [data-testid="column"] { min-width: 100% !important; }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -42,20 +48,22 @@ def load_data():
     return games, features
 
 @st.cache_data
-def load_logos():
+def load_team_data():
     import cfbd
     cfg = cfbd.Configuration(access_token=get_api_key())
-    logos = {}
+    logos  = {}
+    colors = {}
     with cfbd.ApiClient(cfg) as client:
         teams = cfbd.TeamsApi(client).get_fbs_teams()
         for t in teams:
             if t.logos:
-                # use dark (light-colored) logo for dark background
                 dark = next((l for l in t.logos if 'dark' in l), t.logos[0])
                 logos[t.school] = dark
-    return logos
+            if t.color:
+                colors[t.school] = t.color
+    return logos, colors
 
-LOGOS = load_logos()
+LOGOS, COLORS = load_team_data()
 
 @st.cache_resource
 def train_model(games):
@@ -138,9 +146,18 @@ def confidence_label(prob):
     else:
         return "🟢 High Confidence — clear advantage"
 
-# ── Session state for prediction history ─────────────────────────────────────
+# ── Session state ────────────────────────────────────────────────────────────
 if 'history' not in st.session_state:
     st.session_state.history = []
+
+# Read shared URL params if present
+params      = st.query_params
+default_home = params.get('home', 'Alabama')
+default_away = params.get('away', 'Michigan')
+default_year = int(params.get('year', YEARS[0]))
+if default_home not in TEAMS: default_home = 'Alabama'
+if default_away not in TEAMS: default_away = 'Michigan'
+if default_year not in YEARS: default_year = YEARS[0]
 
 # ── Sidebar: program rankings ─────────────────────────────────────────────────
 with st.sidebar:
@@ -182,7 +199,7 @@ col1, col2, col3 = st.columns([5, 1, 5])
 
 with col1:
     st.subheader("Home Team")
-    home_team = st.selectbox("Home Team", TEAMS, index=TEAMS.index('Alabama'), key="home", label_visibility="collapsed")
+    home_team = st.selectbox("Home Team", TEAMS, index=TEAMS.index(default_home), key="home", label_visibility="collapsed")
     if home_team in LOGOS:
         st.image(LOGOS[home_team], width=100)
 
@@ -192,14 +209,13 @@ with col2:
 
 with col3:
     st.subheader("Away Team")
-    default_away = TEAMS.index('Michigan') if 'Michigan' in TEAMS else 1
-    away_team = st.selectbox("Away Team", TEAMS, index=default_away, key="away", label_visibility="collapsed")
+    away_team = st.selectbox("Away Team", TEAMS, index=TEAMS.index(default_away), key="away", label_visibility="collapsed")
     if away_team in LOGOS:
         st.image(LOGOS[away_team], width=100)
 
 col_year, col_neutral = st.columns([3, 2])
 with col_year:
-    year = st.selectbox("Season", YEARS)
+    year = st.selectbox("Season", YEARS, index=YEARS.index(default_year))
 with col_neutral:
     neutral = st.checkbox("Neutral site game", value=False)
 
@@ -231,12 +247,21 @@ away_prob = 1 - home_prob
 st.subheader("Win Probability")
 
 col_h, col_a = st.columns(2)
+home_color = COLORS.get(home_team, '#4a90d9')
+away_color = COLORS.get(away_team, '#e05c5c')
+
 with col_h:
     st.metric(home_team, f"{home_prob:.1%}")
-    st.progress(float(home_prob))
+    st.markdown(
+        f"<div class='color-bar-wrap'><div class='color-bar-fill' style='width:{home_prob*100:.1f}%;background:{home_color};'></div></div>",
+        unsafe_allow_html=True
+    )
 with col_a:
     st.metric(away_team, f"{away_prob:.1%}")
-    st.progress(float(away_prob))
+    st.markdown(
+        f"<div class='color-bar-wrap'><div class='color-bar-fill' style='width:{away_prob*100:.1f}%;background:{away_color};'></div></div>",
+        unsafe_allow_html=True
+    )
 
 # Confidence indicator
 st.info(confidence_label(home_prob))
@@ -253,6 +278,11 @@ if home_prob > away_prob:
     st.success(f"Model favors **{home_team}** by {abs(home_prob - away_prob):.1%}")
 else:
     st.success(f"Model favors **{away_team}** by {abs(home_prob - away_prob):.1%}")
+
+# Share button
+st.query_params.update({'home': home_team, 'away': away_team, 'year': str(year)})
+share_url = f"?home={home_team.replace(' ', '+')}&away={away_team.replace(' ', '+')}&year={year}"
+st.caption(f"Share this matchup: `{share_url}`")
 
 # Log to prediction history
 entry = {

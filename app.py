@@ -7,11 +7,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def get_api_key():
-    # Streamlit Cloud stores secrets in st.secrets; fall back to .env locally
+    key = None
     try:
-        return st.secrets["CFBD_API_KEY"]
+        key = st.secrets["CFBD_API_KEY"]
     except Exception:
-        return os.getenv("CFBD_API_KEY")
+        pass
+    if not key:
+        key = os.getenv("CFBD_API_KEY")
+    if not key:
+        st.error("CFBD_API_KEY not found. Add it to Streamlit secrets or your .env file.")
+        st.stop()
+    return key
 
 st.set_page_config(page_title="CFB Win Probability", page_icon="🏈", layout="centered")
 

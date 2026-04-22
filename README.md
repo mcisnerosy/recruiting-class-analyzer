@@ -73,6 +73,25 @@ Programs like Iowa and Wisconsin consistently overperform their recruiting ranki
 
 ---
 
+## Milestone 5 — Vegas Benchmark
+
+**File:** `betting_lines.py`
+
+The final test: how does the model hold up against Vegas point spreads? Vegas lines were pulled from the CFBD BettingApi for every Power 4 game from 2014–2023, using the consensus line (market average across all providers) where available.
+
+**Finding 1 — Vegas is meaningfully better overall.**
+On the 2021–2023 test set, Vegas correctly predicted the winner 71% of the time compared to the model's 64%. That 7-point gap represents the combined value of everything Vegas knows that the model doesn't — injuries, coaching tendencies, sharp money movement, and years of market refinement.
+
+**Finding 2 — When they disagree, trust Vegas.**
+The model and Vegas disagreed on 243 of 877 test games. On those disagreements, the model was right only 37.5% of the time — worse than a coin flip. Vegas was right 62.5% of the time on the same games. Betting against Vegas whenever the model disagreed would have been a losing strategy by a wide margin.
+
+**Finding 3 — Recruiting and returning production are not market-inefficient signals.**
+The model's variables are real and meaningful, but Vegas has already priced them in. The disagreements are not cases where the model found something Vegas missed — they are cases where Vegas had information the model didn't. To beat Vegas, you would need variables that are underweighted by the market, such as late injury reports, pre-game line movement, or coaching matchup tendencies.
+
+**Key takeaway:** This model is a strong analytical tool for understanding what drives college football outcomes, but it is not a betting edge. The gap between 64% and 71% accuracy is the price of not knowing what Vegas knows.
+
+---
+
 ## Summary of Results
 
 | Model | Features | Metric | Score |
@@ -81,6 +100,9 @@ Programs like Iowa and Wisconsin consistently overperform their recruiting ranki
 | Season Win % — Power 4 | Recruiting rank + lags | R² | 0.18 |
 | Game Outcome — Recruiting only | 4yr avg rank differential | AUC-ROC | 0.69 |
 | Game Outcome — Full model | Recruiting + returning production | AUC-ROC | 0.70 |
+| Vegas Benchmark — Model accuracy | 2021–2023 test set | Accuracy | 64.1% |
+| Vegas Benchmark — Vegas accuracy | 2021–2023 test set | Accuracy | 71.0% |
+| Model on disagreements | Games where model ≠ Vegas | Accuracy | 37.5% |
 
 ---
 
@@ -103,6 +125,7 @@ Programs like Iowa and Wisconsin consistently overperform their recruiting ranki
    python wins_and_merge.py  # pulls win/loss records and merges → merged_data.csv
    python model.py           # season-level win % model
    python game_model.py      # game-level talent differential model
+   python betting_lines.py   # Vegas benchmark and disagreement analysis
    ```
 
 ---

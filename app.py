@@ -174,6 +174,7 @@ with st.sidebar:
 # ── Header ──────────────────────────────────────────────────────────────────
 st.title("🏈 College Football Win Probability")
 st.caption("Predictions based on 4-year recruiting talent and returning production. Power 4 teams only.")
+st.caption("Built by Marcos Cisneros")
 st.divider()
 
 # ── Team selectors ───────────────────────────────────────────────────────────
@@ -345,6 +346,8 @@ st.divider()
 # ── Disclaimer ───────────────────────────────────────────────────────────────
 st.info(
     "**About this model** \n\n"
+    "Model design, analysis, and interpretation by **Marcos Cisneros**. "
+    "Built with assistance from Claude (Anthropic) for code structure and debugging. \n\n"
     "Trained on 1,955 Power 4 regular season games (2014–2020). "
     "Test set accuracy: **64.1%** | AUC-ROC: **0.70**. "
     "For comparison, Vegas lines achieve ~71% accuracy on the same games. "

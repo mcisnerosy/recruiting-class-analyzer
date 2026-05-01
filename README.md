@@ -1,6 +1,10 @@
 # College Football Recruiting vs. Wins — Predictive Model
 
-A data science project exploring whether college football recruiting rankings can predict on-field success. Built using the College Football Data (CFBD) API and Python.
+**Live App:** [Recruiting Class Analyzer](https://recruiting-class-analyzer-lkeemy72oemz9iusy36uax.streamlit.app/?home=Cincinnati&away=Michigan&year=2023)
+
+This project tests whether college football recruiting rankings can predict game outcomes. Built using the CFBD API across 14 seasons and 255 FBS programs, it compares a recruiting-based model against Vegas point spreads as a real-world benchmark.
+
+![Dashboard screenshot](assets/screenshot.png)
 
 ---
 
@@ -112,7 +116,8 @@ The model's variables are real and meaningful, but Vegas has already priced them
 2. Create a virtual environment and install dependencies:
    ```
    python -m venv venv
-   source venv/bin/activate
+   source venv/bin/activate  # Mac/Linux
+   venv\Scripts\activate     # Windows
    pip install -r requirements.txt
    ```
 3. Add your CFBD API key to a `.env` file:

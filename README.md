@@ -30,12 +30,12 @@ The short answer is: barely — but context matters enormously.
 When every FBS team is included, recruiting rank explains only 3% of the variance in win percentage (R² = 0.03). The reason is that a team ranked 80th nationally in recruiting might go 9-3 in the MAC or 4-8 in the SEC. The model can't resolve that without knowing the competition level.
 
 **Finding 2 — Filtering to Power 4 teams reveals real signal.**
-Once the dataset is limited to SEC, Big Ten, Big 12, and ACC teams — where recruiting rankings are more comparable — R² jumps to 0.18. Recruiting explains roughly 1 in 5 wins for Power 4 programs.
+Once the dataset is limited to SEC, Big Ten, Big 12, and ACC teams, where recruiting rankings are more comparable, R² jumps to 0.18. Recruiting explains roughly 1 in 5 wins for Power 4 programs.
 
 **Finding 3 — Lagged recruiting matters, but less than expected.**
 Adding the prior 3 years of recruiting data (representing underclassmen through seniors on the roster) improved the model slightly, but same-year recruiting rank remained the strongest individual predictor. This is likely because recruiting rank acts as a proxy for overall program prestige rather than the freshmen actually playing.
 
-**Key takeaway:** Recruiting is a necessary but not sufficient condition for winning. Programs that recruit poorly almost never win at a high level, but programs that recruit well don't automatically win — that's where coaching and player development separate teams.
+**Key takeaway:** Recruiting is a necessary but not sufficient condition for winning. Programs that recruit poorly almost never win at a high level. But programs that recruit well don't automatically win. That's where coaching and player development separate teams.
 
 ---
 
@@ -45,13 +45,13 @@ Adding the prior 3 years of recruiting data (representing underclassmen through 
 
 The season-level model was still noisy because schedules differ across teams. The game-level model removed that problem entirely by comparing the two teams in each individual matchup head-to-head.
 
-For every Power 4 vs. Power 4 regular season game from 2014–2023, the model calculated each team's 4-year rolling average recruiting rank — an approximation of current roster talent — and used the differential between them to predict the winner.
+For every Power 4 vs. Power 4 regular season game from 2014–2023, the model calculated each team's 4-year rolling average recruiting rank, an approximation of current roster talent, and used the differential between them to predict the winner.
 
 **Finding 1 — Head-to-head recruiting differential is a meaningful predictor.**
 The model achieved 62.7% accuracy and an AUC-ROC of 0.69. For reference, a coin flip is 0.50 and Vegas sportsbooks with all available information operate around 0.70–0.72. Getting to 0.69 with a single signal is significant.
 
 **Finding 2 — The relationship is linear.**
-Logistic Regression outperformed Random Forest, meaning a bigger recruiting talent gap proportionally increases win probability. There are no complex interactions to find — more talent is more talent.
+Logistic Regression outperformed Random Forest, meaning a bigger recruiting talent gap proportionally increases win probability. There are no complex interactions to find. More talent is more talent.
 
 **Finding 3 — Home field advantage is real but modest.**
 The base home win rate across the dataset is ~55%, consistent with known home field advantage in college football.
@@ -68,7 +68,7 @@ The upgraded model added returning production data for each team: specifically `
 The feature coefficient for returning production differential was 1.23, compared to near-zero for recruiting rank and points differential. When both variables compete, experience dominates potential. The team running back their key contributors tends to outperform the team that signed the flashier class but has a young roster.
 
 **Finding 2 — Adding returning production improved the model.**
-AUC improved from 0.69 to 0.70 and accuracy improved from 62.7% to 64.2%. Gaining 1.4 points of AUC from one additional variable is a meaningful improvement — it represents the model correctly ranking roughly 12 more games out of 877.
+AUC improved from 0.69 to 0.70 and accuracy improved from 62.7% to 64.2%. Gaining 1.4 points of AUC from one additional variable is a meaningful improvement. It represents the model correctly ranking roughly 12 more games out of 877.
 
 **Finding 3 — This explains real patterns in college football.**
 Programs like Iowa and Wisconsin consistently overperform their recruiting rankings because they develop and retain players. Blue-blood programs that lose significant production to the NFL Draft or transfer portal in a given year often underperform their recruiting prestige. The data backs this up.
@@ -84,13 +84,13 @@ Programs like Iowa and Wisconsin consistently overperform their recruiting ranki
 The final test: how does the model hold up against Vegas point spreads? Vegas lines were pulled from the CFBD BettingApi for every Power 4 game from 2014–2023, using the consensus line (market average across all providers) where available.
 
 **Finding 1 — Vegas is meaningfully better overall.**
-On the 2021–2023 test set, Vegas correctly predicted the winner 71% of the time compared to the model's 64%. That 7-point gap represents the combined value of everything Vegas knows that the model doesn't — injuries, coaching tendencies, sharp money movement, and years of market refinement.
+On the 2021–2023 test set, Vegas correctly predicted the winner 71% of the time compared to the model's 64%. That 7-point gap represents the combined value of everything Vegas knows that the model doesn't. Injuries, coaching tendencies, sharp money movement, and years of market refinement.
 
 **Finding 2 — When they disagree, trust Vegas.**
 The model and Vegas disagreed on 243 of 877 test games. On those disagreements, the model was right only 37.5% of the time — worse than a coin flip. Vegas was right 62.5% of the time on the same games. Betting against Vegas whenever the model disagreed would have been a losing strategy by a wide margin.
 
 **Finding 3 — Recruiting and returning production are not market-inefficient signals.**
-The model's variables are real and meaningful, but Vegas has already priced them in. The disagreements are not cases where the model found something Vegas missed — they are cases where Vegas had information the model didn't. To beat Vegas, you would need variables that are underweighted by the market, such as late injury reports, pre-game line movement, or coaching matchup tendencies.
+The model's variables are real and meaningful, but Vegas has already priced them in. The disagreements are not cases where the model found something Vegas missed. They are cases where Vegas had information the model didn't. To beat Vegas, you would need variables that are underweighted by the market, such as late injury reports, pre-game line movement, or coaching matchup tendencies.
 
 **Key takeaway:** This model is a strong analytical tool for understanding what drives college football outcomes, but it is not a betting edge. The gap between 64% and 71% accuracy is the price of not knowing what Vegas knows.
 

@@ -38,7 +38,16 @@ def get_api_key():
 # ── Page configuration ────────────────────────────────────────────────────────
 # Must be called before any other Streamlit commands.
 # layout="centered" keeps the content in a readable column rather than full-width.
-st.set_page_config(page_title="CFB Win Probability", page_icon="🏈", layout="centered")
+st.set_page_config(
+    page_title="CFB Win Probability",
+    page_icon="🏈",
+    layout="centered",
+    menu_items={
+        "Get help": "https://github.com/mcisnerosy/recruiting-class-analyzer",
+        "Report a bug": "https://github.com/mcisnerosy/recruiting-class-analyzer/issues",
+        "About": "CFB Win Probability model built with recruiting data. [View on GitHub](https://github.com/mcisnerosy/recruiting-class-analyzer)",
+    },
+)
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 # Streamlit's default theme is light grey — we override it with a dark background

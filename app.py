@@ -383,8 +383,9 @@ else:
 # Update the browser URL with the current selection so users can copy/share it.
 # Anyone opening that URL will see the same matchup pre-filled in the dropdowns.
 st.query_params.update({'home': home_team, 'away': away_team, 'year': str(year)})
-share_url = f"?home={home_team.replace(' ', '+')}&away={away_team.replace(' ', '+')}&year={year}"
-st.caption(f"Share this matchup: `{share_url}`")
+base_url = st.context.url.split('?')[0]
+share_url = f"{base_url}?home={home_team.replace(' ', '+')}&away={away_team.replace(' ', '+')}&year={year}"
+st.caption(f"Share this matchup: {share_url}")
 
 # ── Log to prediction history ─────────────────────────────────────────────────
 # Only add to history if this prediction is different from the last one

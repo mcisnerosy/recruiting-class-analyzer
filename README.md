@@ -2,6 +2,8 @@
 
 **Live App:** [Recruiting Class Analyzer](https://recruiting-class-analyzer-lkeemy72oemz9iusy36uax.streamlit.app/?home=Cincinnati&away=Michigan&year=2023)
 
+Coming into my third year with Notre Dame's recruiting department, a question kept nagging at me: how much does recruiting actually drive winning? I'd always believed recruiting was the foundation of any program. You get the best high school players, you build the roster brick by brick, and you win. But I wanted to test that belief with data. So I built a model, and what I found challenged everything I believed. 
+
 This project tests whether college football recruiting rankings can predict game outcomes. Built using the CFBD API across 14 seasons and 255 FBS programs, it compares a recruiting-based model against Vegas point spreads as a real-world benchmark.
 
 ![Dashboard screenshot](assets/screenshot.png)
